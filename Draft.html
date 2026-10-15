@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valenzuela City Health Center Guide</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 30px 16px;
+      font-family: Arial, sans-serif;
+      color: #292f2b;
+      background: #f5f6f2;
+    }
+
+    .card {
+      max-width: 650px;
+      margin: 35px auto;
+      padding: 30px;
+      background: #fff;
+      border: 1px solid #e4e8e1;
+      border-radius: 14px;
+      box-shadow: 0 4px 18px #0000000a;
+    }
+
+    h1, h2 { text-align: center; }
+    .subtitle { text-align: center; color: #70776f; line-height: 1.6; }
+
+    label {
+      display: block;
+      margin: 18px 0 7px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d5dbd3;
+      border-radius: 7px;
+      background: #fff;
+      font-size: 15px;
+    }
+
+    button {
+      padding: 12px 18px;
+      border: 0;
+      border-radius: 7px;
+      background: #344b3b;
+      color: #fff;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    button:hover { background: #496650; }
+
+    button:focus, input:focus, select:focus {
+      outline: 3px solid #a9c7ae;
+      outline-offset: 2px;
+    }
+
+    .primary { width: 100%; margin-top: 22px; }
+    .secondary { display: block; margin: 20px auto 0; background: #69736b; }
+    #message { min-height: 22px; color: #b42318; text-align: center; }
+    .info { margin-top: 25px; padding: 22px; background: #f5f7f2; border-radius: 10px; line-height: 1.7; }
+    .info h2 { text-align: left; }
+    .note { padding: 12px; border-left: 4px solid #c58b18; background: #fff9e9; line-height: 1.5; }
+    footer { margin: 25px auto; text-align: center; color: #70776f; font-size: 13px; }
+
+    [hidden] { display: none !important; }
+  </style>
+</head>
+
+<body>
+  <main>
+    <section class="card" id="loginPage">
+      <h1>Valenzuela City Health Center Guide</h1>
+      <p class="subtitle">Enter your details to continue to the barangay health center guide.</p>
+
+      <form id="loginForm">
+        <label for="surname">Surname</label>
+        <input
+          id="surname"
+          name="surname"
+          type="text"
+          placeholder="Your surname"
+          autocomplete="family-name"
+          required
+        >
+
+        <label for="firstName">First name</label>
+        <input
+          id="firstName"
+          name="firstName"
+          type="text"
+          placeholder="Your first name"
+          autocomplete="given-name"
+          required
+        >
+
+        <label for="email">Email address</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          required
+        >
+
+        <button class="primary" type="submit">Continue</button>
+      </form>
+
+      <p id="message" role="alert" aria-live="polite"></p>
+    </section>
+
+    <section class="card" id="portalPage" hidden>
+      <h1>Barangay Health Center Information</h1>
+      <p class="subtitle">City: Valenzuela City</p>
+
+      <label for="barangay">Choose a barangay</label>
+      <select id="barangay">
+        <option value="">-- Select a barangay --</option>
+      </select>
+
+      <div class="info" id="healthInfo" aria-live="polite">
+        <p>Select a barangay to see its healthcare center information.</p>
+      </div>
+
+      <button class="secondary" id="logoutButton" type="button">Log out</button>
+    </section>
+  </main>
+
+  <footer>
+    Please verify healthcare center details with the barangay or health center before relying on them.
+  </footer>
+
+  <script>
+    // Change this address if you want to block a different email.
+    const BLOCKED_EMAIL = "aridumpacc3@gmail.com";
+
+    // EXAMPLE DATA ONLY. Replace each item with verified information.
+    const healthCenters = {
+      "Arkong Bato": {
+        name: "Sample Arkong Bato Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Bagbaguin": {
+        name: "Sample Bagbaguin Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Balangkas": {
+        name: "Sample Balangkas Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Bignay": {
+        name: "Sample Bignay Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Bisig": {
+        name: "Sample Bisig Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Canumay East": {
+        name: "Sample Canumay East Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Canumay West": {
+        name: "Sample Canumay West Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Coloong": {
+        name: "Sample Coloong Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Dalandanan": {
+        name: "Sample Dalandanan Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Gen. T. de Leon": {
+        name: "Sample Gen. T. de Leon Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Isla": {
+        name: "Sample Isla Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Karuhatan": {
+        name: "Sample Karuhatan Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Lawang Bato": {
+        name: "Sample Lawang Bato Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Lingunan": {
+        name: "Sample Lingunan Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Mabolo": {
+        name: "Sample Mabolo Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Malanday": {
+        name: "Sample Malanday Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Malinta": {
+        name: "Sample Malinta Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Mapulang Lupa": {
+        name: "Sample Mapulang Lupa Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Maring": {
+        name: "Sample Maring Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Parada": {
+        name: "Sample Parada Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Poblacion": {
+        name: "Sample Poblacion Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Polo": {
+        name: "Sample Polo Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Punturin": {
+        name: "Sample Punturin Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Rincon": {
+        name: "Sample Rincon Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Tagalag": {
+        name: "Sample Tagalag Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Ugong": {
+        name: "Sample Ugong Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Veinte Reales": {
+        name: "Sample Veinte Reales Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      },
+      "Wawang Pulo": {
+        name: "Sample Wawang Pulo Health Center",
+        address: "Replace with verified address",
+        hours: "Replace with verified hours",
+        contact: "Replace with verified number",
+        services: "Replace with verified services"
+      }
+    };
+
+    const loginForm = document.getElementById("loginForm");
+    const loginPage = document.getElementById("loginPage");
+    const portalPage = document.getElementById("portalPage");
+    const message = document.getElementById("message");
+    const barangaySelect = document.getElementById("barangay");
+    const healthInfo = document.getElementById("healthInfo");
+    const logoutButton = document.getElementById("logoutButton");
+
+    // Add each barangay name above to the dropdown.
+    Object.keys(healthCenters).forEach(function (name) {
+      const option = document.createElement("option");
+      option.value = name;
+      option.textContent = name;
+      barangaySelect.appendChild(option);
+    });
+
+    // Show the portal after a valid form submission.
+    loginForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const email = document.getElementById("email").value.trim().toLowerCase();
+
+      if (email === BLOCKED_EMAIL.toLowerCase()) {
+        message.textContent =
+          "This email address is not allowed to access the portal.";
+        return;
+      }
+
+      message.textContent = "";
+      loginPage.hidden = true;
+      portalPage.hidden = false;
+      window.location.hash = "portal";
+      portalPage.scrollIntoView({ behavior: "smooth" });
+    });
+
+    // Show the selected barangay's healthcare center information.
+    barangaySelect.addEventListener("change", function () {
+      const name = barangaySelect.value;
+
+      if (!name) {
+        healthInfo.innerHTML =
+          "<p>Select a barangay to see its healthcare center information.</p>";
+        return;
+      }
+
+      const center = healthCenters[name];
+
+      healthInfo.innerHTML =
+        "<h2>" + name + "</h2>" +
+        "<p><strong>Healthcare center:</strong> " + center.name + "</p>" +
+        "<p><strong>Address:</strong> " + center.address + "</p>" +
+        "<p><strong>Hours:</strong> " + center.hours + "</p>" +
+        "<p><strong>Contact:</strong> " + center.contact + "</p>" +
+        "<p><strong>Services:</strong> " + center.services + "</p>" +
+        "<p class='note'>Sample information: verify these details with the barangay or health center.</p>";
+    });
+
+    // Return to the login form.
+    logoutButton.addEventListener("click", function () {
+      portalPage.hidden = true;
+      loginPage.hidden = false;
+      loginForm.reset();
+      barangaySelect.value = "";
+      healthInfo.innerHTML =
+        "<p>Select a barangay to see its healthcare center information.</p>";
+      message.textContent = "";
+
+      history.replaceState(
+        null,
+        "",
+        window.location.pathname + window.location.search
+      );
+
+      loginPage.scrollIntoView({ behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
